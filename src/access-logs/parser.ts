@@ -30,7 +30,7 @@ class Parser {
         const ngnixLogObject = {};
         const lineMatch = line.match(defaultNginxRegex);
 
-        // skip lines that match regex including empty lines
+        // skip lines that don't  match regex including empty lines
         if (!lineMatch) {
           continue;
         }
