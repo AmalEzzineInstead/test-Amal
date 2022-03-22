@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Parser } from './parser';
 
 describe('parse', () => {
