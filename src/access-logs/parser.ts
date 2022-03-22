@@ -1,4 +1,3 @@
-const events = require('events');
 const fs = require('fs');
 
 class Parser {
@@ -15,7 +14,7 @@ class Parser {
       'remote_addr',
       'remote_user',
       'time_local',
-      'time_local',
+      'request',
       'status',
       'bytes_sent',
       'http_referer',
@@ -31,6 +30,7 @@ class Parser {
       const ngnixLogObject = {};
       const lineMatch = line.match(defaultNginxRegex);
 
+      // skip empty lines if they exist
       if (!lineMatch) {
         continue;
       }
@@ -43,33 +43,6 @@ class Parser {
     }
 
     return ngnixLines;
-
-    // try {
-    //  const rl = readline.createInterface({
-    //    // TODO: change this.path, get the value through a getter
-    //    input: fs.createReadStream(this.path),
-    //    crlfDelay: Infinity,
-    //  });
-
-    //  rl.on('line', (line) => {
-    //    const lineMatch = line.match(defaultNginxRegex);
-    //    const ngnixLogObject = {};
-    //    lineMatch.shift();
-
-    //    for(let i = 0; i < lineMatch.length; i++){
-    //      ngnixLogObject[defaultNginxLogColumns[i]] = lineMatch[i];
-    //    }
-    //    ngnixLines.push(ngnixLogObject);
-    //    console.log(ngnixLines);
-    //  });
-
-    //  await events.once(rl, 'close');
-
-    //  return ngnixLines;
-
-    // } catch (err) {
-    //  throw new Error('An error occurred while parsing the file.');
-    // }
   }
 }
 
