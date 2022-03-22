@@ -21,31 +21,31 @@ class Parser {
       'http_user_agent',
     ];
 
-    const ngnixLines = [];
+    try {
+      const ngnixLines = [];
+      const allFileContents = fs.readFileSync(this.path, 'utf-8');
+      const fileLines = allFileContents.split(/\r?\n/);
 
-    const allFileContents = fs.readFileSync(this.path, 'utf-8');
-    const fileLines = allFileContents.split(/\r?\n/);
+      for(const line of fileLines) {
+        const ngnixLogObject = {};
+        const lineMatch = line.match(defaultNginxRegex);
 
-    for(const line of fileLines) {
-      const ngnixLogObject = {};
-      const lineMatch = line.match(defaultNginxRegex);
+        // skip lines that match regex including empty lines
+        if (!lineMatch) {
+          continue;
+        }
+        lineMatch.shift();
 
-      // skip empty lines if they exist
-      if (!lineMatch) {
-        continue;
+        for (let i = 0; i < lineMatch.length; i++) {
+          ngnixLogObject[defaultNginxLogColumns[i]] = lineMatch[i];
+        }
+        ngnixLines.push(ngnixLogObject);
       }
-      lineMatch.shift();
 
-      for (let i = 0; i < lineMatch.length; i++) {
-        ngnixLogObject[defaultNginxLogColumns[i]] = lineMatch[i];
-      }
-      ngnixLines.push(ngnixLogObject);
+      return ngnixLines;
+    } catch (err) {
+      throw new Error('An error occurred while parsing the file.');
     }
 
-    return ngnixLines;
   }
 }
-
-const parser = new Parser('./examples/sample2.log');
-console.log(parser.parse());
-
